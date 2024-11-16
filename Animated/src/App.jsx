@@ -4,7 +4,10 @@ import data from "./data";
 import LocomotiveScroll from "locomotive-scroll";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import ScrollTrigger from "gsap/ScrollTrigger";
 
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const [showingCanvas, setShowingCanvas] = useState(false);
@@ -105,6 +108,32 @@ useGSAP(() => {
     };
 }, [showingCanvas]);
 
+useGSAP(() => {
+    // Create animations for multiple sections
+    const sections = [
+      ".what-we-do-section",
+      ".process-section",  // Add class to your process section
+      // Add more sections as needed
+    ];
+
+    sections.forEach((section, index) => {
+      gsap.from(section, {
+        scrollTrigger: {
+          trigger: section,
+          start: "top 90%",
+          end: "top top",
+          toggleActions: "play reverse play reverse",
+          markers: true, // Enable for debugging
+        },
+        x: -200,
+        opacity: 0,
+        duration: 1,
+        delay: index * 0.2, // Stagger the animations
+        ease: "power3.out"
+      });
+    });
+}, []);
+
   return (
     <>
       <span
@@ -155,42 +184,42 @@ useGSAP(() => {
             </p>
               <p className={`mt-10 ${showingCanvas ? 'dark-mode text-black' : 'light-mode text-black'}`}>scroll</p>
           </div>
-          <div className="w-full  mt-20">
+          <div className="w-full  mt-32">
             <h1
               ref={headingref}
-              className={`text-black text-[11rem] font-normal leading-[1] mt-7 tracking-tight px-12 `}
+              className={`text-black text-[11rem] font-normal leading-[1]  tracking-tight px-12 `}
             >
             Thirtysixstudios
             </h1>
           </div>
         </div>
       </div>
-      <div className="w-full h-screen relative mt-[20%] flex justify-between p-12">
+      <div className="what-we-do-section w-full h-screen relative mt-[20%] flex justify-between p-12">
         {showingCanvas &&
           data[1].map((canvasDetails, index) => (
             <Canvas details={canvasDetails} key={index} />
           ))}
         <div className="w-full">
-          <h3 className={`text-black text-3xl font-regular pl-20 `}>
+          <h3 className={`text-black text-3xl font-regular pl-20`}>
             01 - WHAT WE DO
           </h3>
         </div>
         <div className="w-full">
-          <h2 className={`text-black text-4xl font-semibold w-[70%] pl-20 `}>
+          <h2 className={`text-black text-4xl font-semibold w-[70%] pl-20`}>
             We aim to revolutionize digital production in the advertising space,
             bringing your ideas to life.
           </h2>
         </div>
       </div>
 
-      <div className="w-full h-screen relative mt-[-5%] flex justify-between p-12">
+      <div className="process-section w-full h-screen relative mt-[-10%] flex justify-between p-12">
         {showingCanvas &&
           data[0].map((canvasDetails, index) => (
             <Canvas details={canvasDetails} key={index} />
           ))}
         <div className="w-full">
           
-          <h2 className={`text-black text-4xl font-semibold w-[70%] pl-20`}>
+          <h2 className='text-black text-4xl font-semibold w-[70%] pl-20'>
             We aim to revolutionize digital production in the advertising space,
             bringing your ideas to life.
           </h2>
