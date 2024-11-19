@@ -5,6 +5,7 @@ import LocomotiveScroll from "locomotive-scroll";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import TrailingCircle from "./TrailingCircle"; 
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -73,11 +74,11 @@ useGSAP(() => {
         })
         .to(growingspan.current, {
           scale: 1000,
-          duration: 1.8,
-          onComplete: () => {
-            document.documentElement.classList.remove('light-mode');
-            document.documentElement.classList.add('dark-mode');
-          }
+          duration: 1.4,
+          // onComplete: () => {
+          //   document.documentElement.classList.remove('light-mode');
+          //   document.documentElement.classList.add('dark-mode');
+          // }
         });
       } else {
         // Shrinking animation
@@ -90,10 +91,10 @@ useGSAP(() => {
           opacity: 0,
           duration: 0.4,
           ease: "back.in(1.7)",
-          onComplete: () => {
-            document.documentElement.classList.remove('dark-mode');
-            document.documentElement.classList.add('light-mode');
-          }
+          // onComplete: () => {
+          //   document.documentElement.classList.remove('dark-mode');
+          //   document.documentElement.classList.add('light-mode');
+          // }
         })
         .set(growingspan.current, { display: 'none' });
       }
@@ -112,7 +113,9 @@ useGSAP(() => {
     // Create animations for multiple sections
     const sections = [
       ".what-we-do-section",
-      ".process-section",  // Add class to your process section
+      ".process-section", 
+      ".expertise-section",
+      ".collaboration-section",
       // Add more sections as needed
     ];
 
@@ -121,11 +124,12 @@ useGSAP(() => {
         scrollTrigger: {
           trigger: section,
           start: "top 90%",
-          end: "top top",
+          // end: "top top",
           toggleActions: "play reverse play reverse",
-          markers: true, // Enable for debugging
+          // markers: true,
+          scrub: true // Enable for debugging
         },
-        x: -200,
+        y: 200,
         opacity: 0,
         duration: 1,
         delay: index * 0.2, // Stagger the animations
@@ -134,8 +138,46 @@ useGSAP(() => {
     });
 }, []);
 
+
+useGSAP(() => {
+ gsap.to('.animated-section', {
+  opacity: 1,
+  duration: .7,
+  ease: "power2.out",
+  delay:.3,
+  y: 0,
+  });
+
+},[]);
+
+useGSAP(() => {
+gsap.to(headingref.current,{
+  opacity:1,
+  duration:1.4,
+  ease: "power2.out",
+  delay:1,
+  x:0
+})
+},[])
+
+useGSAP(() => {
+gsap.fromTo('.animated-section2',{
+  opacity:0,
+  x:-100,
+  
+},{
+  opacity:1,
+  x:0,
+  duration:1.4,
+  ease: "power2.out",
+  delay:.3,
+})
+},[])
+
   return (
     <>
+    <TrailingCircle /> 
+    
       <span
         ref={growingspan}
         className="growingspan block bg-red-600 w-5 h-5 rounded-full fixed top-[-10%] left-[-10%]"
@@ -146,12 +188,13 @@ useGSAP(() => {
           data[0].map((canvasDetails, index) => (
             <Canvas details={canvasDetails} key={index} />
           ))}
-        <div className="w-full h-screen ">
-          <nav className="p-8 z-50">
+        <div className="w-full h-screen  ">
+          <nav className="p-4 z-50 animated-section mt-[ -12 %]" style={{opacity:0, transform: 'translateY(-100%)', transition: 'all 0s ease'}}>
+          
             <div className="flex justify-between items-center">
               <a
                 href="#home"
-                className={`text-2xl font-regular hover:opacity-70 transition-colors duration-300 text-black`}
+                className={`text-xl font-regular hover:opacity-70 transition-colors duration-300 text-black`}
               >
                 thirtysixstudios
               </a>
@@ -170,7 +213,7 @@ useGSAP(() => {
               </ul>
             </div>
           </nav>
-          <div className="container w-full px-[20%] mt-10">
+          <div className="container w-full px-[20%] mt-10 animated-section2">
             <div className="text w-[50%] text-3xl leading-[1.4]">
               <h3 className={`text-black font-regular `}>
                 At Thirtysixstudio, we build immersive digital experiences for
@@ -187,14 +230,14 @@ useGSAP(() => {
           <div className="w-full  mt-32">
             <h1
               ref={headingref}
-              className={`text-black text-[11rem] font-normal leading-[1]  tracking-tight px-12 `}
+              className={`text-black text-[11rem] font-normal leading-[1]  tracking-tight px-12  `}style={{opacity:0,tranform:'translateX(-100%)',transition: 'all 0s ease'}}
             >
             Thirtysixstudios
             </h1>
           </div>
         </div>
       </div>
-      <div className="what-we-do-section w-full h-screen relative mt-[20%] flex justify-between p-12">
+      <div className="what-we-do-section w-full h-screen relative mt-[15%] flex justify-between p-12">
         {showingCanvas &&
           data[1].map((canvasDetails, index) => (
             <Canvas details={canvasDetails} key={index} />
@@ -212,14 +255,14 @@ useGSAP(() => {
         </div>
       </div>
 
-      <div className="process-section w-full h-screen relative mt-[-10%] flex justify-between p-12">
+      <div className="process-section w-full h-screen relative mt-[-15%] flex justify-between p-12">
         {showingCanvas &&
           data[0].map((canvasDetails, index) => (
             <Canvas details={canvasDetails} key={index} />
           ))}
         <div className="w-full">
           
-          <h2 className='text-black text-4xl font-semibold w-[70%] pl-20'>
+          <h2 className='text-black text-4xl font-semibold w-[70%] pl-20 '>
             We aim to revolutionize digital production in the advertising space,
             bringing your ideas to life.
           </h2>
@@ -231,12 +274,12 @@ useGSAP(() => {
         </div>
       </div>
 
-      <div className="w-full h-screen relative mt-[-5%] flex justify-between p-12">
+      <div className="w-full h-screen relative mt-[-15%] flex justify-between p-12 expertise-section">
         {showingCanvas &&
           data[2].map((canvasDetails, index) => (
             <Canvas details={canvasDetails} key={index} />
           ))}
-        <div className="w-full">
+        <div className="w-full ">
           <h3 className={`text-black text-3xl font-regular pl-20 `}>
             03 - OUR EXPERTISE
           </h3>
@@ -248,12 +291,12 @@ useGSAP(() => {
         </div>
       </div>
 
-      <div className="w-full h-screen relative mt-[-5%] flex justify-between p-12">
+      <div className="w-full h-screen relative mt-[-15%] flex justify-between p-12 collaboration-section">
         {showingCanvas &&
           data[3].map((canvasDetails, index) => (
             <Canvas details={canvasDetails} key={index} />
           ))}
-        <div className="w-full">
+        <div className="w-full ">
           <h2 className={`text-black text-4xl font-semibold w-[70%] pl-20`}>
             Our collaborative approach ensures your vision is transformed into impactful digital reality.
           </h2>
@@ -378,6 +421,7 @@ useGSAP(() => {
           />
         </svg>
       </button>
+     
     </>
   );
 }
